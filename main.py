@@ -22,10 +22,19 @@ def generate_headers(method, url):
     return 'HTTP/1.1 200 OK\n\n', 200
 
 
+def generate_content(code, url):
+    if code == 404:
+        return '<h1>404</h1><p>Not found</p>'
+    if code == 405:
+        return '<h1>405</h1><p>Method not allowed</p>'
+    return '<h1>Hello {}</h1>'.format(URLS[url])
+
+
 def generate_response(request):
     method, url = parse_request(request)
     headers, code = generate_headers(method, url)
-    return headers.encode('utf-8') + 'Hello world'.encode('utf-8')
+    body = generate_content(code, url)
+    return (headers + body).encode('utf-8')
 
 
 def main():
