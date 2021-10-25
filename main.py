@@ -1,9 +1,9 @@
 import socket
-import json
+from views import *
 
 URLS = {
-    '/': 'index',
-    '/blog': 'blog',
+    '/': index,
+    '/blog': blog,
 }
 
 
@@ -27,7 +27,7 @@ def generate_content(code, url):
         return '<h1>404</h1><p>Not found</p>'
     if code == 405:
         return '<h1>405</h1><p>Method not allowed</p>'
-    return '<h1>Hello {}</h1>'.format(URLS[url])
+    return URLS[url]()
 
 
 def generate_response(request):
@@ -44,6 +44,7 @@ def main():
     server_sock.bind(listening_address)
     server_sock.listen()
 
+    # get messages from client and send response back
     while True:
         client_sock, client_address = server_sock.accept()
         request = client_sock.recv(1024)  # receive buffer in bytes
